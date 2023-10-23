@@ -1,0 +1,42 @@
+version: '3'
+services:
+        bitcoin-server-test:
+                build:
+                        context: .
+                        dockerfile: Dockerfile-server-test
+                image: frt/bitcoin-server-test
+                container_name: bitcoin-server-test
+                volumes:
+                      - /mnt/ssd/bitcoin-test:/bitcoin
+        bitcoin-server:
+                build:
+                        context: .
+                        dockerfile: Dockerfile-server
+                image: frt/bitcoin-server
+                container_name: bitcoin-server
+                volumes:
+                      - /mnt/ssd/bitcoin:/bitcoin
+        bitcoin-access:
+                build:
+                        context: .
+                        dockerfile: Dockerfile-bitcoin-access
+                image: frt/bitcoin-access
+                tty: true
+                container_name: bitcoin-access
+                environment:
+                      - RPC_PORT=8332
+                      - RPC_HOST=bitcoin-server
+                volumes:
+                        - ./src:/mnt
+        bitcoin-access-test:
+                build:
+                        context: .
+                        dockerfile: Dockerfile-bitcoin-access
+                image: frt/bitcoin-access
+                tty: true
+                container_name: bitcoin-access-test
+                environment:
+                      - RPC_PORT=18332
+                      - RPC_HOST=bitcoin-server-test
+                volumes:
+                        - ./src:/mnt
