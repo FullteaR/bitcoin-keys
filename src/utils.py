@@ -64,10 +64,3 @@ def parsePubKey(pubkey_hex):
     vk = VerifyingKey.from_string(pubkey_bytes, curve=SECP256k1)
     return vk.pubkey.point.x(), vk.pubkey.point.y()
 
-id_ = "5a4216acfb7b8619b4455925e77d789867cea06b74c77f09be41037fcddc062c"
-transactionHex = getTransactionHex(id_)
-assert transactionHex=="01000000015975479e8161302eca4b69ad687418655dfc6d960da3c642542d712193bc6127010000006b48304502210094ea6b6cce6b1224047c39fd5da6ce932d0a5091a5d20f4e1dd4d2e1a6c04733022065d606a3e210650c1ad857d99a1eadd12ab7f08d5def1913766117124be0cec7012102a166ea841c7344b2d3a9a1f9e890d8b2144b5b975cb0ed87d68f12065df89ea7ffffffff0258c90900000000001976a9141eca25f20d936a6e176701b6fe2953d358d9add788ac86022b00000000001976a9144edc3518c2b5eb0a35535d0c47f164b7b5423a0a88ac00000000"
-
-signAndPubkeys = getSignAndPubkeys(transactionHex)
-assert len(signAndPubkeys)==1
-print(signAndPubkeys[0])
