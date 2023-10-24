@@ -1,0 +1,3 @@
+src/__pycache__/*
+src/bitcoin-server.txt
+src/bitcoin-server-test.txt
