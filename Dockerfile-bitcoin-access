@@ -3,4 +3,4 @@ FROM python:3.11
 RUN apt update && apt upgrade -y && apt autoremove
 RUN pip install --upgrade pip
 RUN pip install ecdsa bitcoin python-bitcoinrpc bitcoinlib tqdm retry-decorator
-CMD sleep infinity
+CMD python /mnt/access.py

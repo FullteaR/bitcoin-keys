@@ -23,6 +23,8 @@ services:
                 image: frt/bitcoin-access
                 tty: true
                 container_name: bitcoin-access
+                depends_on:
+                      - bitcoin-server
                 environment:
                       - RPC_PORT=8332
                       - RPC_HOST=bitcoin-server
@@ -35,6 +37,8 @@ services:
                 image: frt/bitcoin-access
                 tty: true
                 container_name: bitcoin-access-test
+                depends_on:
+                      - bitcoin-server-test
                 environment:
                       - RPC_PORT=18332
                       - RPC_HOST=bitcoin-server-test
