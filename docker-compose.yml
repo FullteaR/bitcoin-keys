@@ -1,16 +1,5 @@
 version: '3'
 services:
-        bitcoin-server-test:
-                build:
-                        context: .
-                        dockerfile: Dockerfile-server-test
-                image: frt/bitcoin-server-test
-                container_name: bitcoin-server-test
-                networks:
-                  bitcoin_local_net_test:
-                    ipv4_address: 192.168.2.2
-                volumes:
-                      - /mnt/ssd/bitcoin-test:/bitcoin
         bitcoin-server:
                 build:
                         context: .
@@ -18,10 +7,23 @@ services:
                 image: frt/bitcoin-server
                 container_name: bitcoin-server
                 networks:
-                  bitcoin_local_net:
-                    ipv4_address: 192.168.1.2
+                        bitcoin_local_net:
+                                ipv4_address: 192.168.1.2
                 volumes:
-                      - /mnt/ssd/bitcoin:/bitcoin
+                        - /mnt/ssd/bitcoin:/bitcoin
+                command: ["bitcoind"]
+        bitcoin-server-test:
+                build:
+                        context: .
+                        dockerfile: Dockerfile-server
+                image: frt/bitcoin-server
+                container_name: bitcoin-server-test
+                networks:
+                        bitcoin_local_net_test:
+                                ipv4_address: 192.168.2.2
+                volumes:
+                        - /mnt/ssd/bitcoin-test:/bitcoin
+                command: ["bitcoind", "-testnet"]
         bitcoin-access:
                 build:
                         context: .
@@ -30,13 +32,13 @@ services:
                 tty: true
                 container_name: bitcoin-access
                 depends_on:
-                      - bitcoin-server
+                        - bitcoin-server
                 environment:
-                      - RPC_PORT=8332
-                      - RPC_HOST=192.168.1.2
+                        - RPC_PORT=8332
+                        - RPC_HOST=192.168.1.2
                 networks:
-                  bitcoin_local_net:
-                    ipv4_address: 192.168.1.3
+                        bitcoin_local_net:
+                                ipv4_address: 192.168.1.3
                 volumes:
                         - ./src:/mnt
         bitcoin-access-test:
@@ -47,22 +49,22 @@ services:
                 tty: true
                 container_name: bitcoin-access-test
                 depends_on:
-                      - bitcoin-server-test
+                        - bitcoin-server-test
                 environment:
-                      - RPC_PORT=18332
-                      - RPC_HOST=192.168.2.2
+                        - RPC_PORT=18332
+                        - RPC_HOST=192.168.2.2
                 networks:
-                  bitcoin_local_net_test:
-                    ipv4_address: 192.168.2.3
+                        bitcoin_local_net_test:
+                                ipv4_address: 192.168.2.3
                 volumes:
                         - ./src:/mnt
 
 networks:
-    bitcoin_local_net:
-      ipam:
-          config:
-              - subnet: 192.168.1.0/24
-    bitcoin_local_net_test:
-      ipam:
-          config:
-              - subnet: 192.168.2.0/24      
+        bitcoin_local_net:
+                ipam:
+                        config:
+                                - subnet: 192.168.1.0/24
+        bitcoin_local_net_test:
+                ipam:
+                        config:
+                                - subnet: 192.168.2.0/24
