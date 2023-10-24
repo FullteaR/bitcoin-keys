@@ -5,6 +5,8 @@ import os
 import time
 
 
+time.sleep(30)
+
 conn = getConn()
 M = conn.getblockcount()
 
@@ -18,7 +20,6 @@ for height in tqdm(range(1, M)):
             transactionHex = getTransactionHex(transactionId)
             try:
                 results += getSignAndPubkeys(transactionHex)
-                time.sleep(0.1)
             except:
                 pass
         time.sleep(0.1)
