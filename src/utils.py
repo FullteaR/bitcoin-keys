@@ -7,34 +7,28 @@ from ecdsa import VerifyingKey, SECP256k1
 def getConn():
     rpc_user = "frt"
     rpc_password = "pass"
-    #rpc_host = os.environ["RPC_HOST"]
-    #rpc_port = os.environ["RPC_PORT"]
-    rpc_host = "bitcoin-server"
-    rpc_port = "8332"
+    rpc_host = os.environ["RPC_HOST"]
+    rpc_port = os.environ["RPC_PORT"]
 
     rpc_url = f"http://{rpc_user}:{rpc_password}@{rpc_host}:{rpc_port}"
     return AuthServiceProxy(rpc_url)
 
 
-def getBlockHash(height):
-    conn = getConn()
+def getBlockHash(height, conn):
     return conn.getblockhash(height)
 
 
-def getTransactionIds(blockHash):
-    conn = getConn()
+def getTransactionIds(blockHash, conn):
     return conn.getblock(blockHash)["tx"]
 
 
-def getTransactionHex(transactionId):
-    conn = getConn()
+def getTransactionHex(transactionId, conn):
     return conn.getrawtransaction(transactionId)
 
 
 def getSignAndPubkeys(transactionHex):
     tx = bitcoin.deserialize(transactionHex)
     results = []
-
     for in_, out_ in zip(tx["ins"], tx["outs"]):
         script_sig = in_["script"]
         if out_["script"].startswith('76a914') and out_["script"].endswith('88ac'): #P2PKH

@@ -14,10 +14,10 @@ results = []
 
 for height in tqdm(range(1, M)):
     try:
-        blockHash = getBlockHash(height)
-        transactionIds = getTransactionIds(blockHash)
+        blockHash = getBlockHash(height, conn)
+        transactionIds = getTransactionIds(blockHash, conn)
         for transactionId in transactionIds:
-            transactionHex = getTransactionHex(transactionId)
+            transactionHex = getTransactionHex(transactionId, conn)
             try:
                 results += getSignAndPubkeys(transactionHex)
             except:
