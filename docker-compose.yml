@@ -3,7 +3,7 @@ services:
         bitcoin-server:
                 build:
                         context: .
-                        dockerfile: Dockerfile-server
+                        dockerfile: Dockerfile-bitcoin-server
                 image: frt/bitcoin-server
                 container_name: bitcoin-server
                 networks:
@@ -15,7 +15,7 @@ services:
         bitcoin-server-test:
                 build:
                         context: .
-                        dockerfile: Dockerfile-server
+                        dockerfile: Dockerfile-bitcoin-server
                 image: frt/bitcoin-server
                 container_name: bitcoin-server-test
                 networks:
