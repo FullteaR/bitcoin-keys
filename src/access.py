@@ -21,10 +21,11 @@ for height in tqdm(range(1, M)):
             transactionHex = getTransactionHex(transactionId, conn)
             try:
                 results[height] += getSignAndPubkeys(transactionHex)
+                time.sleep(0.01)
             except Exception as ex:
                 print(ex)
                 pass
-        time.sleep(0.1)
+        time.sleep(0.01)
     except Exception as e:
         print(e)
         
