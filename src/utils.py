@@ -32,22 +32,31 @@ def getSignAndPubkeys(transactionHex):
     for in_, out_ in zip(tx["ins"], tx["outs"]):
         script_sig = in_["script"]
         if out_["script"].startswith('76a914') and out_["script"].endswith('88ac'): #P2PKH
-            sign_len = int(script_sig[:2], 16)*2
-            sign = script_sig[2:sign_len+2]
-            pubkey_len = int(script_sig[sign_len+2:sign_len+4], 16)*2
-            pubkey = script_sig[sign_len+4:sign_len+4+pubkey_len]
+            logging.info("P2PKH key found")
+            script_sig = unhexlify(script_sig)
+            sign_len = script_sig[0:1]
+            sign = script_sig[1:sign_len+1]
+            pubkey_len = script_sig[sign_len+1:sign_len+2]
+            pubkey = script_sig[sign_len+2:sign_len+2+pubkey_len]
             sign = parseSignature(sign)
-            results.append((sign, parsePubKey(pubkey)))
+            pubkey = parsePubKey(pubkey)
+            results.append((sign, pubkey))
         elif len(out_["script"]) == 130 or len(out_["script"]) == 66: #P2PK
-            results.append(((), parsepubKey(script_sig)))
+            logging.info("P2PK found")
+            results.append(((0,0), parsepubKey(unhexlify(script_sig))))
+        else:
+            logging.info("Unknown format. skipped")
+            pass
 
     return results
 
-def parseSignature(signature_hex):
-    signature = unhexlify(signature_hex)
+
+
+def parseSignature(signature):
     
     # 署名が正しくDERエンコードされていることを確認
     if signature[0] != 0x30:
+        logging.warn("No DER Format! signature: {0}".format(signature))
         return 0,0 
     # Rの値の取得
     r_length = signature[3]
@@ -60,7 +69,6 @@ def parseSignature(signature_hex):
     return r, s
 
 def parsePubKey(pubkey_hex):
-    pubkey_bytes = unhexlify(pubkey_hex)
     vk = VerifyingKey.from_string(pubkey_bytes, curve=SECP256k1)
     return vk.pubkey.point.x(), vk.pubkey.point.y()
 
