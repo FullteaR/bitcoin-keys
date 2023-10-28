@@ -4,6 +4,7 @@ import itertools
 import os 
 import time
 import logging
+logging.basicConfig(level=logging.INFO)
 
 logging.info("waiting for 30 seconds to start...")
 time.sleep(30)
@@ -29,7 +30,6 @@ for height in tqdm(range(1, M)):
             except Exception as ex:
                 logging.error("The exception happens during getting sign and pubkeys for height {0}".format(height))
                 print(ex)
-                pass
         time.sleep(0.01)
         logging.info("{0} / {1} done.".format(height, M))
     except Exception as e:

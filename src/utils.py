@@ -3,6 +3,7 @@ from bitcoinrpc.authproxy import AuthServiceProxy
 import bitcoin
 from binascii import unhexlify
 from ecdsa import VerifyingKey, SECP256k1
+import logging
 
 def getConn():
     rpc_user = "frt"
@@ -11,6 +12,7 @@ def getConn():
     rpc_port = os.environ["RPC_PORT"]
 
     rpc_url = f"http://{rpc_user}:{rpc_password}@{rpc_host}:{rpc_port}"
+    logging.info("connection ready: {0}".format(rpc_url))
     return AuthServiceProxy(rpc_url)
 
 
@@ -32,20 +34,26 @@ def getSignAndPubkeys(transactionHex):
     for in_, out_ in zip(tx["ins"], tx["outs"]):
         script_sig = in_["script"]
         if out_["script"].startswith('76a914') and out_["script"].endswith('88ac'): #P2PKH
-            logging.info("P2PKH key found")
+            logging.debug("P2PKH key found. script:{0}".format(script_sig))
             script_sig = unhexlify(script_sig)
-            sign_len = script_sig[0:1]
+            sign_len = int(script_sig[0])
+            logging.info("sign len: {0}".format(sign_len))
             sign = script_sig[1:sign_len+1]
-            pubkey_len = script_sig[sign_len+1:sign_len+2]
+            logging.debug("sign: {0}".format(sign))
+            pubkey_len = int(script_sig[sign_len+1])
+            logging.debug("pubkey len: {0}".format(pubkey_len))
             pubkey = script_sig[sign_len+2:sign_len+2+pubkey_len]
+            logging.debug("pubkey: {0}".format(pubkey))
             sign = parseSignature(sign)
             pubkey = parsePubKey(pubkey)
             results.append((sign, pubkey))
         elif len(out_["script"]) == 130 or len(out_["script"]) == 66: #P2PK
-            logging.info("P2PK found")
+            logging.debug("P2PK found")
             results.append(((0,0), parsepubKey(unhexlify(script_sig))))
         else:
-            logging.info("Unknown format. skipped")
+            logging.warn("Unknown format. skipped.")
+            logging.warn("In: {0}".format(script_sig))
+            logging.warn("Out: {0}".format(out_["script"]))
             pass
 
     return results
@@ -68,7 +76,7 @@ def parseSignature(signature):
     
     return r, s
 
-def parsePubKey(pubkey_hex):
-    vk = VerifyingKey.from_string(pubkey_bytes, curve=SECP256k1)
+def parsePubKey(pubkey):
+    vk = VerifyingKey.from_string(pubkey, curve=SECP256k1)
     return vk.pubkey.point.x(), vk.pubkey.point.y()
 
