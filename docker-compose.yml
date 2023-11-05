@@ -11,6 +11,7 @@ services:
                                 ipv4_address: 192.168.1.2
                 volumes:
                         - /mnt/ssd/bitcoin:/bitcoin
+                        - /mnt/ssd/bitcoin-dbs:/db
                 command: ["bitcoind"]
         bitcoin-server-test:
                 build:
@@ -23,6 +24,7 @@ services:
                                 ipv4_address: 192.168.2.2
                 volumes:
                         - /mnt/ssd/bitcoin-test:/bitcoin
+                        - /mnt/ssd/bitcoin-dbs:/db
                 command: ["bitcoind", "-testnet"]
         bitcoin-access:
                 build:

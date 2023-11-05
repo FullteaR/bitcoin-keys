@@ -37,7 +37,7 @@ def getSignAndPubkeys(transactionHex):
             logging.debug("P2PKH key found. script:{0}".format(script_sig))
             script_sig = unhexlify(script_sig)
             sign_len = int(script_sig[0])
-            logging.info("sign len: {0}".format(sign_len))
+            logging.debug("sign len: {0}".format(sign_len))
             sign = script_sig[1:sign_len+1]
             logging.debug("sign: {0}".format(sign))
             pubkey_len = int(script_sig[sign_len+1])
