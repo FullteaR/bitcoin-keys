@@ -23,7 +23,7 @@ M = 10000
 logging.info("Current Height of Bitcoin block chain is {0}".format(M))
 
 dbpath = os.path.join("/db",chain_name+".db") 
-results = leveldb.LevelDB(dbpath)
+results = leveldb.LevelDB(dbpath, create_if_missing=True)
 
 for height in tqdm(range(1, M)):
     if isin(results, height):
