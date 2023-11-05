@@ -10,8 +10,8 @@ services:
                                 ipv4_address: 192.168.1.2
                 volumes:
                         - /mnt/ssd/bitcoin:/bitcoin
-                command: ["bitcoind"]
-                
+                command: [ "bitcoind" ]
+
         bitcoin-server-test:
                 build:
                         context: ./bitcoin-server
@@ -22,8 +22,8 @@ services:
                                 ipv4_address: 192.168.2.2
                 volumes:
                         - /mnt/ssd/bitcoin-test:/bitcoin
-                command: ["bitcoind", "-testnet"]
-                
+                command: [ "bitcoind", "-testnet" ]
+
         bitcoin-access-main:
                 build:
                         context: ./bitcoin-access
@@ -42,7 +42,7 @@ services:
                         - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
                         - ./out:/out
-                        
+
         bitcoin-access-test:
                 build:
                         context: ./bitcoin-access
@@ -61,13 +61,13 @@ services:
                         - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
                         - ./out:/out
-        
+
         analytics:
                 build:
                         context: ./analytics
                 image: frt/blockchain-analytics
                 tty: true
-                container_name: blockchain_analytics
+                container_name: blockchain-analytics
                 environment:
                         - RPC_MAIN_HOST=192.168.1.2
                         - RPC_MAIN_PORT=8332
