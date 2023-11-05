@@ -4,6 +4,7 @@ import bitcoin
 from binascii import unhexlify
 from ecdsa import VerifyingKey, SECP256k1
 import logging
+import time
 from retry import retry
 
 def getConn(rpc_host=None, rpc_port=None, rpc_user="frt", rpc_password="pass"):
@@ -90,7 +91,9 @@ def extractInfosFromHeight(height, conn):
         transactionHex = getTransactionHex(transactionId, conn)
         try:
             result += getSignAndPubkeys(transactionHex)
+            time.sleep(0.0001)
         except Exception as e:
             print(e)
             logging.error("The exception happens during parsing sign and pubkeys for height {0}".format(height))
+    time.sleep(0.0001)
     return result
