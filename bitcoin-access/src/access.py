@@ -38,7 +38,7 @@ for height in tqdm(range(1, M)):
         
 
 logging.info("start writing to file...")
-file_name = chain_name + ".txt"
+file_name = chain_name + ".json"
 results = []
 for height in range(1, M):
     for result in get(db, height):

@@ -6,7 +6,11 @@ RUN pip install --upgrade pip setuptools
 RUN pip install\
 	jupyter\
 	tqdm\
-	requests
+	requests\
+	bitcoin\
+	python-bitcoinrpc\
+	ecdsa\
+	bitcoinlib
 
 
 RUN mkdir -p /root/.jupyter && touch /root/.jupyter/jupyter_notebook_config.py

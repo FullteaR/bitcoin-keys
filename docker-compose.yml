@@ -73,6 +73,10 @@ services:
                         - RPC_MAIN_PORT=8332
                         - RPC_TEST_HOST=192.168.2.2
                         - RPC_TEST_PORT=18332
+                volumes:
+                        - ./out:/out
+                ports:
+                        - 127.0.0.1:12346:8888
                 networks:
                         bitcoin_local_net_main:
                                 ipv4_address: 192.168.1.4
