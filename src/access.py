@@ -17,8 +17,7 @@ conn = getConn()
 chain_name = "bitcoin-" + conn.getblockchaininfo()["chain"]
 logging.info("Running on chain {0}".format(chain_name))
 
-#M = conn.getblockcount()
-M = 10000
+M = conn.getblockcount()
 
 logging.info("Current Height of Bitcoin block chain is {0}".format(M))
 
@@ -28,25 +27,13 @@ results = leveldb.LevelDB(dbpath, create_if_missing=True)
 for height in tqdm(range(1, M)):
     if isin(results, height):
         continue
-    result = []
     try:
-        blockHash = getBlockHash(height, conn)
-        transactionIds = getTransactionIds(blockHash, conn)
-        for transactionId in transactionIds:
-            transactionHex = getTransactionHex(transactionId, conn)
-            try:
-                result += getSignAndPubkeys(transactionHex)
-                time.sleep(0.01)
-            except Exception as ex:
-                logging.error("The exception happens during getting sign and pubkeys for height {0}".format(height))
-                print(ex)
+        result = extractInfosFromHeight(height, conn)
         put(results, height, result)
-        time.sleep(0.01)
         if height%1000==1:
             logging.info("{0} / {1} done.".format(height, M))
-    except Exception as e:
-        logging.error("The exception happens during calculating height {0}".format(height))
-        print(e)
+    except:
+        logging.error("Exception happens during calculating")
         
 
 logging.info("start writing to file...")
