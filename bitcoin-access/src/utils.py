@@ -6,11 +6,11 @@ from ecdsa import VerifyingKey, SECP256k1
 import logging
 from retry import retry
 
-def getConn():
-    rpc_user = "frt"
-    rpc_password = "pass"
-    rpc_host = os.environ["RPC_HOST"]
-    rpc_port = os.environ["RPC_PORT"]
+def getConn(rpc_host=None, rpc_port=None, rpc_user="frt", rpc_password="pass"):
+    if rpc_host is None:
+        rpc_host = os.environ["RPC_HOST"]
+    if rpc_port is None:
+        rpc_port = os.environ["RPC_PORT"]
 
     rpc_url = f"http://{rpc_user}:{rpc_password}@{rpc_host}:{rpc_port}"
     logging.info("connection ready: {0}".format(rpc_url))

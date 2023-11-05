@@ -2,8 +2,7 @@ version: '3'
 services:
         bitcoin-server:
                 build:
-                        context: .
-                        dockerfile: Dockerfile-bitcoin-server
+                        context: ./bitcoin-server
                 image: frt/bitcoin-server
                 container_name: bitcoin-server
                 networks:
@@ -14,8 +13,7 @@ services:
                 command: ["bitcoind"]
         bitcoin-server-test:
                 build:
-                        context: .
-                        dockerfile: Dockerfile-bitcoin-server
+                        context: ./bitcoin-server
                 image: frt/bitcoin-server
                 container_name: bitcoin-server-test
                 networks:
@@ -26,8 +24,7 @@ services:
                 command: ["bitcoind", "-testnet"]
         bitcoin-access:
                 build:
-                        context: .
-                        dockerfile: Dockerfile-bitcoin-access
+                        context: ./bitcoin-access
                 image: frt/bitcoin-access
                 tty: true
                 container_name: bitcoin-access
@@ -40,12 +37,12 @@ services:
                         bitcoin_local_net:
                                 ipv4_address: 192.168.1.3
                 volumes:
-                        - ./src:/mnt
+                        - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
+                        - ./out:/out
         bitcoin-access-test:
                 build:
-                        context: .
-                        dockerfile: Dockerfile-bitcoin-access
+                        context: ./bitcoin-access
                 image: frt/bitcoin-access
                 tty: true
                 container_name: bitcoin-access-test
@@ -58,8 +55,9 @@ services:
                         bitcoin_local_net_test:
                                 ipv4_address: 192.168.2.3
                 volumes:
-                        - ./src:/mnt
+                        - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
+                        - ./out:/out
 
 networks:
         bitcoin_local_net:
