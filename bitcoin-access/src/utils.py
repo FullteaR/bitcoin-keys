@@ -81,7 +81,7 @@ def parsePubKey(pubkey):
     vk = VerifyingKey.from_string(pubkey, curve=SECP256k1)
     return vk.pubkey.point.x(), vk.pubkey.point.y()
 
-@retry(ConnectionError, tries=5, delay=2)
+@retry(tries=5, delay=2)
 def extractInfosFromHeight(height, conn):
     result = []
     blockHash = getBlockHash(height, conn)
@@ -90,6 +90,7 @@ def extractInfosFromHeight(height, conn):
         transactionHex = getTransactionHex(transactionId, conn)
         try:
             result += getSignAndPubkeys(transactionHex)
-        except:
+        except Exception as e:
+            print(e)
             logging.error("The exception happens during parsing sign and pubkeys for height {0}".format(height))
     return result

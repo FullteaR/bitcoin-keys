@@ -31,7 +31,7 @@ services:
                 tty: true
                 container_name: bitcoin-access-main
                 depends_on:
-                        - bitcoin-server
+                        - bitcoin-server-main
                 environment:
                         - RPC_HOST=192.168.1.2
                         - RPC_PORT=8332

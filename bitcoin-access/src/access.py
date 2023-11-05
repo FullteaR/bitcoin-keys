@@ -32,7 +32,8 @@ for height in tqdm(range(1, M)):
         put(db, height, result)
         if height%1000==1:
             logging.info("{0} / {1} done.".format(height, M))
-    except:
+    except Exception as e:
+        print(e)
         logging.error("Exception happens during calculating")
         
 
