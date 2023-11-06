@@ -42,12 +42,12 @@ file_name = chain_name + ".json"
 results = []
 for height in range(1, M):
     for result in get(db, height):
-        for tx id in result:
-            r,s = result[tx][0]
-            x,y = result[tx][1]
+        for txid in result:
+            r,s = result[txid][0]
+            x,y = result[txid][1]
             d = {
                 "height":height,
-                "tx":tx,
+                "tx":txid,
                 "r":r,
                 "s":s,
                 "x":x,
