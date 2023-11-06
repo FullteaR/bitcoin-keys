@@ -84,13 +84,13 @@ def parsePubKey(pubkey):
 
 @retry(tries=5, delay=2)
 def extractInfosFromHeight(height, conn):
-    result = []
+    result = {}
     blockHash = getBlockHash(height, conn)
     transactionIds = getTransactionIds(blockHash, conn)
     for transactionId in transactionIds:
         transactionHex = getTransactionHex(transactionId, conn)
         try:
-            result += getSignAndPubkeys(transactionHex)
+            result[transactionId] = getSignAndPubkeys(transactionHex)
             time.sleep(0.0001)
         except Exception as e:
             print(e)

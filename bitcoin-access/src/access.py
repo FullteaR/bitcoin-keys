@@ -42,15 +42,17 @@ file_name = chain_name + ".json"
 results = []
 for height in range(1, M):
     for result in get(db, height):
-        r,s = result[0]
-        x,y = result[1]
-        d = {
-            "height":height,
-            "r":r,
-            "s":s,
-            "x":x,
-            "y":y
-        }
+        for tx id in result:
+            r,s = result[tx][0]
+            x,y = result[tx][1]
+            d = {
+                "height":height,
+                "tx":tx,
+                "r":r,
+                "s":s,
+                "x":x,
+                "y":y
+            }
         results.append(d)
 
 with open(os.path.join("/out",file_name), "w") as fp:
