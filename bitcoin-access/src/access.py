@@ -56,5 +56,5 @@ for height in range(1, M):
         results.append(d)
 
 with open(os.path.join("/out",file_name), "w") as fp:
-    json.dump(results, fp)
+    json.dump(results, fp, indent=4)
 
