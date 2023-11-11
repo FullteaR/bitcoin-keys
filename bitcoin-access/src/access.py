@@ -29,6 +29,7 @@ for height in tqdm(range(1, M)):
         continue
     try:
         result = extractInfosFromHeight(height, conn)
+        print(result)
         put(db, height, result)
         if height%1000==1:
             logging.info("{0} / {1} done.".format(height, M))
@@ -41,20 +42,19 @@ logging.info("start writing to file...")
 file_name = chain_name + ".json"
 results = []
 for height in range(1, M):
-    for result in get(db, height):
-        print(result)
-        for txid in result:
-            r,s = result[txid][0]
-            x,y = result[txid][1]
-            d = {
-                "height":height,
-                "tx":txid,
-                "r":r,
-                "s":s,
-                "x":x,
-                "y":y
-            }
-            results.append(d)
+    result = get(db, height)
+    for txid in result:
+        r,s = result[txid][0]
+        x,y = result[txid][1]
+        d = {
+            "height":height,
+            "tx":txid,
+            "r":r,
+            "s":s,
+            "x":x,
+            "y":y
+        }
+        results.append(d)
 
 with open(os.path.join("/out",file_name), "w") as fp:
     json.dump(results, fp, indent=4)
