@@ -75,6 +75,7 @@ services:
                         - RPC_TEST_PORT=18332
                 volumes:
                         - ./out:/out
+                        - ./analytics/src:/mnt
                 ports:
                         - 127.0.0.1:12346:8888
                 networks:

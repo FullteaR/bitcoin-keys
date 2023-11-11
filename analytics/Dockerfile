@@ -10,6 +10,7 @@ RUN pip install\
 	bitcoin\
 	python-bitcoinrpc\
 	ecdsa\
+	base58\
 	bitcoinlib
 
 
