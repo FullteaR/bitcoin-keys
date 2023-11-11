@@ -44,17 +44,18 @@ results = []
 for height in range(1, M):
     result = get(db, height)
     for txid in result:
-        r,s = result[txid][0]
-        x,y = result[txid][1]
-        d = {
-            "height":height,
-            "tx":txid,
-            "r":r,
-            "s":s,
-            "x":x,
-            "y":y
-        }
-        results.append(d)
+        for iter_ in result[txid]:
+            r,s = iter_[0]
+            x,y = iter_[1]
+            d = {
+                "height":height,
+                "tx":txid,
+                "r":r,
+                "s":s,
+                "x":x,
+                "y":y
+            }
+            results.append(d)
 
 with open(os.path.join("/out",file_name), "w") as fp:
     json.dump(results, fp, indent=4)
