@@ -29,12 +29,11 @@ for height in tqdm(range(1, M)):
         continue
     try:
         result = extractInfosFromHeight(height, conn)
-        print(result)
         put(db, height, result)
         if height%1000==1:
             logging.info("{0} / {1} done.".format(height, M))
     except Exception as e:
-        print(e)
+        logging.error(e)
         logging.error("Exception happens during calculating")
         
 
