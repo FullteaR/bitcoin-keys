@@ -6,8 +6,7 @@ services:
                 image: frt/bitcoin-server
                 container_name: bitcoin-server-main
                 networks:
-                        bitcoin_local_net_main:
-                                ipv4_address: 192.168.1.2
+                        - bitcoin_local_net_main
                 volumes:
                         - /mnt/ssd/bitcoin:/bitcoin
                 command: [ "bitcoind" ]
@@ -18,8 +17,7 @@ services:
                 image: frt/bitcoin-server
                 container_name: bitcoin-server-test
                 networks:
-                        bitcoin_local_net_test:
-                                ipv4_address: 192.168.2.2
+                        - bitcoin_local_net_test
                 volumes:
                         - /mnt/ssd/bitcoin-test:/bitcoin
                 command: [ "bitcoind", "-testnet" ]
@@ -33,11 +31,10 @@ services:
                 depends_on:
                         - bitcoin-server-main
                 environment:
-                        - RPC_HOST=192.168.1.2
+                        - RPC_HOST=bitcoin-server-main
                         - RPC_PORT=8332
                 networks:
-                        bitcoin_local_net_main:
-                                ipv4_address: 192.168.1.3
+                        - bitcoin_local_net_main
                 volumes:
                         - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
@@ -52,14 +49,14 @@ services:
                 depends_on:
                         - bitcoin-server-test
                 environment:
-                        - RPC_HOST=192.168.2.2
+                        - RPC_HOST=bitcoin-server-test
                         - RPC_PORT=18332
                 networks:
-                        bitcoin_local_net_test:
-                                ipv4_address: 192.168.2.3
+                        - bitcoin_local_net_test
                 volumes:
                         - ./bitcoin-access/src:/mnt
                         - /mnt/ssd/bitcoin-dbs:/db
+
                         - ./out:/out
 
         analytics:
@@ -69,9 +66,9 @@ services:
                 tty: true
                 container_name: blockchain-analytics
                 environment:
-                        - RPC_MAIN_HOST=192.168.1.2
+                        - RPC_MAIN_HOST=bitcoin-access-main
                         - RPC_MAIN_PORT=8332
-                        - RPC_TEST_HOST=192.168.2.2
+                        - RPC_TEST_HOST=bitcoin-access-test
                         - RPC_TEST_PORT=18332
                 volumes:
                         - ./out:/out
@@ -79,17 +76,12 @@ services:
                 ports:
                         - 127.0.0.1:12346:8888
                 networks:
-                        bitcoin_local_net_main:
-                                ipv4_address: 192.168.1.4
-                        bitcoin_local_net_test:
-                                ipv4_address: 192.168.2.4
+                        - bitcoin_local_net_main
+                        - bitcoin_local_net_test
 
 networks:
-        bitcoin_local_net_main:
-                ipam:
-                        config:
-                                - subnet: 192.168.1.0/24
+        bitcoin_local_net_main: 
         bitcoin_local_net_test:
-                ipam:
-                        config:
-                                - subnet: 192.168.2.0/24
+        eth_local_net_main:
+
+

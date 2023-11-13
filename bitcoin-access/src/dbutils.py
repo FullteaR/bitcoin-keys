@@ -4,8 +4,6 @@ import json
 def get(db, key):
     key = json.dumps(key).encode("utf-8")
     value = db.Get(key)
-    if value is None:
-        return None
     return json.loads(value.decode("utf-8"))
 
 def put(db, key, value):
