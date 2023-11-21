@@ -8,7 +8,7 @@ RUN apt update && apt upgrade -y && apt install -y\
 	cmake\
 	&& apt autoremove
 
-RUN git clone --recurse-submodules https://github.com/google/leveldb.git /leveldb
+RUN git clone --recurse-submodules --depth 1 https://github.com/google/leveldb.git /leveldb
 RUN mkdir -p /leveldb/build
 WORKDIR /leveldb/build
 RUN cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
