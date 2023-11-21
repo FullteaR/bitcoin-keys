@@ -40,7 +40,7 @@ for height in tqdm(range(1, M)):
 logging.info("start writing to file...")
 file_name = chain_name + ".json"
 results = []
-for height in range(1, M):
+for height in tqdm(range(1, M)):
     result = get(db, height)
     for txid in result:
         for iter_ in result[txid]:
