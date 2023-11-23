@@ -1,6 +1,12 @@
 FROM python:3.12
 
-RUN apt update -y && apt upgrade -y && apt autoremove -y
+RUN apt update && apt upgrade -y && apt install -y\
+	libsnappy-dev\
+	wget\
+	build-essential\
+	git\
+	cmake\
+	&& apt autoremove -y
 
 
 
