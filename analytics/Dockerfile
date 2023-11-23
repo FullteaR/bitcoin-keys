@@ -1,6 +1,6 @@
 FROM python:3.12
 
-RUN apt update && apt upgrade && apt autoremove
+RUN apt update -y && apt upgrade -y && apt autoremove -y
 
 RUN pip install --upgrade pip setuptools
 RUN pip install\
