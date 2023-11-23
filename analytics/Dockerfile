@@ -2,6 +2,14 @@ FROM python:3.12
 
 RUN apt update -y && apt upgrade -y && apt autoremove -y
 
+
+
+RUN git clone --recurse-submodules --depth 1 https://github.com/google/leveldb.git /leveldb
+RUN mkdir -p /leveldb/build
+WORKDIR /leveldb/build
+RUN cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+
+WORKDIR /
 RUN pip install --upgrade pip setuptools
 RUN pip install\
 	jupyter\
@@ -11,8 +19,8 @@ RUN pip install\
 	python-bitcoinrpc\
 	ecdsa\
 	base58\
-	bitcoinlib
-
+	bitcoinlib\
+	leveldb
 
 RUN mkdir -p /root/.jupyter && touch /root/.jupyter/jupyter_notebook_config.py
 RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> /root/.jupyter/jupyter_notebook_config.py && \

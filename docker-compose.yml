@@ -37,8 +37,7 @@ services:
                         - bitcoin_local_net_main
                 volumes:
                         - ./bitcoin-access/src:/mnt
-                        - /mnt/ssd/bitcoin-dbs:/db
-                        - ./out:/out
+                        - ./dbs:/db
 
         bitcoin-access-test:
                 build:
@@ -55,9 +54,7 @@ services:
                         - bitcoin_local_net_test
                 volumes:
                         - ./bitcoin-access/src:/mnt
-                        - /mnt/ssd/bitcoin-dbs:/db
-
-                        - ./out:/out
+                        - ./dbs:/db
 
         analytics:
                 build:
@@ -71,8 +68,8 @@ services:
                         - RPC_TEST_HOST=bitcoin-access-test
                         - RPC_TEST_PORT=18332
                 volumes:
-                        - ./out:/out
                         - ./analytics/src:/mnt
+                        - ./dbs:/db
                 ports:
                         - 127.0.0.1:12346:8888
                 networks:
