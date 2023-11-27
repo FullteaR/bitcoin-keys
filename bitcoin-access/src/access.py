@@ -5,7 +5,7 @@ import time
 import logging
 from tqdm.auto import tqdm
 from dbutils import *
-import leveldb
+from leveldict import LevelDict
 
 logging.basicConfig(level=logging.INFO)
 
@@ -22,14 +22,14 @@ M = conn.getblockcount()
 logging.info("Current Height of Bitcoin block chain is {0}".format(M))
 
 dbpath = os.path.join("/db",chain_name+".db") 
-db = leveldb.LevelDB(dbpath, create_if_missing=True)
+db = LevelDict(dbpath)
 
 for height in tqdm(range(1, M)):
-    if isin(db, height):
+    if height in db:
         continue
     try:
         result = extractInfosFromHeight(height, conn)
-        put(db, height, result)
+        db[height] = result
         if height%1000==1:
             logging.info("{0} / {1} done.".format(height, M))
     except Exception as e:
