@@ -28,7 +28,7 @@ RUN pip install\
 	bitcoinlib\
 	leveldb
 
-RUN pip install git+https://github.com/FullteaR/LevelDict
+RUN pip install git+https://github.com/FullteaR/LevelDictionary
 
 RUN mkdir -p /root/.jupyter && touch /root/.jupyter/jupyter_notebook_config.py
 RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> /root/.jupyter/jupyter_notebook_config.py && \

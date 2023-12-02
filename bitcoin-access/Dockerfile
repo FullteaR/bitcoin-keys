@@ -19,5 +19,5 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
 WORKDIR /mnt
 RUN pip install --upgrade pip
 RUN pip install ecdsa bitcoin leveldb python-bitcoinrpc bitcoinlib tqdm retry
-RUN pip install git+https://github.com/FullteaR/LevelDict
+RUN pip install git+https://github.com/FullteaR/LevelDictionary
 CMD python /mnt/access.py && sleep infinity
