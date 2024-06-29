@@ -1,5 +1,7 @@
 extern crate bitcoincore_rpc;
 
+
+use std::collections::HashMap;
 use bitcoincore_rpc::{Auth, Client, RpcApi};
 use bitcoincore_rpc::bitcoin::{Address, SigHashType, TxOut, Txid};
 use bitcoincore_rpc::bitcoin::blockdata::script::Instruction;
@@ -80,7 +82,7 @@ fn main() {
                     }
                     Ok(s) => s,
                 };
-                info!(sighash);
+                info!("{}", sighash);
                 
             });
         });
