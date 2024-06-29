@@ -37,7 +37,6 @@ services:
                         - bitcoin_local_net_main
                 volumes:
                         - ./bitcoin-access/src:/mnt
-                        - ./dbs:/db
 
         bitcoin-access-test:
                 build:
@@ -54,7 +53,6 @@ services:
                         - bitcoin_local_net_test
                 volumes:
                         - ./bitcoin-access/src:/mnt
-                        - ./dbs:/db
 
         analytics:
                 build:
