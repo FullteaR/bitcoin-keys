@@ -1,6 +1,9 @@
 extern crate bitcoincore_rpc;
 
 use bitcoincore_rpc::{Auth, Client, RpcApi};
+use bitcoincore_rpc::bitcoin::{Address, SigHashType, TxOut, Txid};
+use bitcoincore_rpc::bitcoin::blockdata::script::Instruction;
+use log::{error, info, LevelFilter};
 
 fn main() {
 
@@ -9,6 +12,8 @@ fn main() {
         Auth::UserPass("frt".to_string(),
         "pass".to_string())
     ).unwrap();
+
+    let mut utxos = HashMap::<(Txid, usize), TxOut>::new();
     
     let block = u64::from(
         rpc.get_mining_info()
@@ -20,7 +25,7 @@ fn main() {
         if height % 500 == 0 {
             info!("height: {}", height);
         }
-        let current_block_hash = match client.get_block_hash(height) {
+        let current_block_hash = match rpc.get_block_hash(height) {
             Err(_) => {
                 error!("leaving, error getting blockhash for height: {} ", height);
                 error!("Failed to get block!");
@@ -30,7 +35,13 @@ fn main() {
             Ok(h) => h,
         };
 
-        let current_block = client.get_block(&current_block_hash).unwrap();
+        let current_block = rpc.get_block(&current_block_hash).unwrap();
+
+        current_block.txdata.iter().for_each(|tx| {
+            for (vout, txout) in tx.output.iter().enumerate() {
+                utxos.insert((tx.txid(), vout), txout.clone());
+            }
+        });
 
         current_block.txdata.iter().for_each(|tx| {
             let output_count = tx.output.len();
