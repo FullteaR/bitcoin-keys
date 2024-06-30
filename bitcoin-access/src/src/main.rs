@@ -45,15 +45,19 @@ fn main() {
         current_block.txdata.iter().skip(1).for_each(|tx| {
             let output_count = tx.output.len();
             tx.input.iter().enumerate().for_each(|(id, input)| {
-                let assoc_output = utxos
-                    .remove(&(
-                        input.previous_output.txid,
-                        input.previous_output.vout as usize,
-                    ))
-                    .unwrap();
-                if id < output_count {
-                    return;
+                let assoc_output = match utxos.remove(&(input.previous_output.txid, input.previous_output.vout as usize)) {
+                    Some(assoc_output) => {
+                        if id < output_count {
+                            return;
+                        }
+                        assoc_output;
+                    }
+                    None => {
+                        return;
+                    }
                 }
+                    
+
             
                 let sighash_byte = if assoc_output.script_pubkey.is_p2pkh()
                     || assoc_output.script_pubkey.is_p2pk()
