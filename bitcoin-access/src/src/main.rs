@@ -3,9 +3,9 @@ extern crate bitcoincore_rpc;
 
 use std::collections::HashMap;
 use bitcoincore_rpc::{Auth, Client, RpcApi};
-use bitcoincore_rpc::bitcoin::{Address, SigHashType, TxOut, Txid};
+use bitcoincore_rpc::bitcoin::{SigHashType, TxOut, Txid};
 use bitcoincore_rpc::bitcoin::blockdata::script::Instruction;
-use log::{error, info, LevelFilter};
+use log::{error, info};
 
 fn main() {
 
@@ -39,13 +39,13 @@ fn main() {
 
         let current_block = rpc.get_block(&current_block_hash).unwrap();
 
-        current_block.txdata.iter().for_each(|tx| {
+        current_block.txdata.iter().skip(1).for_each(|tx| {
             for (vout, txout) in tx.output.iter().enumerate() {
                 utxos.insert((tx.txid(), vout), txout.clone());
             }
         });
 
-        current_block.txdata.iter().for_each(|tx| {
+        current_block.txdata.iter().skip(1).for_each(|tx| {
             let output_count = tx.output.len();
             tx.input.iter().enumerate().for_each(|(id, input)| {
                 let assoc_output = utxos
