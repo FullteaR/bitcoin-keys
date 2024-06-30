@@ -17,10 +17,10 @@ fn main() {
 
     let mut utxos = HashMap::<(Txid, usize), TxOut>::new();
     
-    let block = rpc.get_block_count().expect("Failed to get block count");
+    let block_count = rpc.get_block_count().expect("Failed to get block count");
     info!("The maximum block height is: {}", block_count);
 
-    (0..block).into_iter().for_each(|height| {
+    (0..block_count).into_iter().for_each(|height| {
         if height % 500 == 0 {
             info!("height: {}", height);
         }
