@@ -17,11 +17,8 @@ fn main() {
 
     let mut utxos = HashMap::<(Txid, usize), TxOut>::new();
     
-    let block = u64::from(
-        rpc.get_mining_info()
-            .expect("Failed to fetch the height of latest block")
-            .blocks,
-    );
+    let block = rpc.get_block_count().expect("Failed to get block count");
+    info!("The maximum block height is: {}", block_count);
 
     (0..block).into_iter().for_each(|height| {
         if height % 500 == 0 {
