@@ -23,13 +23,17 @@ fn main() {
     (0..block_count).into_iter().for_each(|height| {
         if height % 500 == 0 {
             info!("height: {}", height);
+            println!("height: {}", height);
         }
         let current_block_hash = match rpc.get_block_hash(height) {
             Err(_) => {
                 error!("leaving, error getting blockhash for height: {} ", height);
                 error!("Failed to get block!");
                 error!("Is bitcoin daemon running?");
-                panic!();
+                println!("leaving, error getting blockhash for height: {} ", height);
+                println!("Failed to get block!");
+                println!("Is bitcoin daemon running?");
+                return;
             }
             Ok(h) => h,
         };
